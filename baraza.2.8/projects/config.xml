@@ -16,4 +16,5 @@
 	<APP path="baraza" dbname="baraza" auth="entity" dbclass="org.postgresql.Driver" dbpassword="Baraza2011" dbusername="postgres" dbpath="jdbc:postgresql://localhost/baraza" key="baraza" xmlfile="baraza.xml">Baraza</APP>
 	<SERVER path="hr" dbname="hr" dbclass="org.postgresql.Driver" dbpassword="Baraza2011" disable="false" dbusername="postgres" dbpath="jdbc:postgresql://localhost/hr" xmlfile="tomcat.xml">HR Tomcat Server</SERVER>
 	<SERVER path="hr" dbname="hr" dbclass="org.postgresql.Driver" dbpassword="Baraza2011" disable="true" dbusername="postgres" dbpath="jdbc:postgresql://localhost/hr" xmlfile="mail.xml">HR Mailing Server</SERVER>
+	<APP path="cafe" dbname="cafe" dbclass="org.postgresql.Driver" dbusername="postgres" dbpath="jdbc:postgresql://localhost/cafe" key="cafe" xmlfile="cafe.xml">cafe</APP>
 </APPLIST>
