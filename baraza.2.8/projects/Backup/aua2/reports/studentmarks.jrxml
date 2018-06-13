@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="studentmarks" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="211066df-6169-4024-a0e1-89486715c1fd">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<queryString>
+		<![CDATA[SELECT mark_id, grade, mark_weight, first_session,
+substring(first_session from 1 for 9)  as session_year, count(existing_id) as grade_count
+FROM vw_student_marks
+WHERE (first_session is not null)
+GROUP BY mark_id, grade, mark_weight, first_session
+ORDER BY first_session, mark_id;]]>
+	</queryString>
+	<field name="mark_id" class="java.lang.Integer"/>
+	<field name="grade" class="java.lang.String"/>
+	<field name="mark_weight" class="java.lang.Integer"/>
+	<field name="first_session" class="java.lang.String"/>
+	<field name="session_year" class="java.lang.String"/>
+	<field name="grade_count" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-1" x="103" y="10" width="296" height="30" uuid="6d9401c7-9258-4f09-ade0-61cec986a3ca"/>
+				<textElement>
+					<font fontName="Times New Roman" size="24"/>
+				</textElement>
+				<text><![CDATA[Students Marks]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="94" splitType="Stretch">
+			<crosstab>
+				<reportElement key="crosstab-1" x="10" y="8" width="772" height="77" uuid="801a8cce-9906-4bd4-a676-36a8c554d2b3"/>
+				<crosstabHeaderCell>
+					<cellContents mode="Transparent"/>
+				</crosstabHeaderCell>
+				<rowGroup name="session_year" width="68" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{session_year}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents mode="Transparent">
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="66" height="14" uuid="177cd1bf-0b93-4b35-a2f5-6f10f57a76a9"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{session_year}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents mode="Transparent">
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="66" height="30" uuid="2e64a65c-fc0d-483e-8d3f-327b9780c985"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<rowGroup name="first_session" width="100" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{first_session}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents mode="Transparent">
+							<box>
+								<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+							</box>
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="100" height="14" uuid="852656e9-63d6-47ad-8152-e43ef41bd378"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{first_session}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents mode="Transparent">
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="100" height="14" uuid="228a1ab8-79c9-4400-b1ad-81733829c37a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" isBold="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<textFieldExpression><![CDATA["Year Total"]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="grade" height="25" totalPosition="End" headerPosition="Center">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{grade}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents mode="Transparent">
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="33" height="25" uuid="76387cf3-0123-480e-ad4d-96a76b09a737"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{grade}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents mode="Transparent">
+							<textField isBlankWhenNull="false">
+								<reportElement key="textField" x="0" y="0" width="43" height="25" uuid="aece685b-1bc7-4776-b8d1-3b45712cf7d9"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman"/>
+								</textElement>
+								<textFieldExpression><![CDATA["Grade Total"]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="gradecount_Sum" class="java.lang.Long" calculation="Sum">
+					<measureExpression><![CDATA[$F{grade_count}]]></measureExpression>
+				</measure>
+				<crosstabCell width="33" height="15">
+					<cellContents mode="Transparent">
+						<box>
+							<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+						</box>
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="33" height="14" uuid="41b29f3a-2bbb-4c9a-8ad4-bef92a7611c3"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font fontName="Times New Roman"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{gradecount_Sum}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="44" height="15" columnTotalGroup="grade">
+					<cellContents mode="Transparent">
+						<box>
+							<pen lineWidth="0.0" lineStyle="Solid"/>
+							<topPen lineWidth="0.0" lineStyle="Solid"/>
+							<leftPen lineWidth="0.0" lineStyle="Solid"/>
+							<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+							<rightPen lineWidth="0.0" lineStyle="Solid"/>
+						</box>
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="43" height="14" uuid="cf962955-6f9d-414b-ae63-b85f6aaa15b9"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font fontName="Times New Roman"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{gradecount_Sum}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="33" height="15" rowTotalGroup="first_session">
+					<cellContents mode="Transparent">
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="33" height="14" uuid="a0086399-1f8f-4089-a248-ccd75b629697"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font fontName="Times New Roman" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{gradecount_Sum}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="44" height="15" rowTotalGroup="first_session" columnTotalGroup="grade">
+					<cellContents mode="Transparent">
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="43" height="14" uuid="2e221454-c719-410d-934a-9a1880119101"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font fontName="Times New Roman" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{gradecount_Sum}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="33" height="30" rowTotalGroup="session_year">
+					<cellContents mode="Transparent">
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="33" height="30" uuid="6abcbd3c-d3c8-4c48-9256-cf79fa2576e4"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font fontName="Times New Roman" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{gradecount_Sum}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="44" height="30" rowTotalGroup="session_year" columnTotalGroup="grade">
+					<cellContents mode="Transparent">
+						<textField isBlankWhenNull="false">
+							<reportElement key="textField" x="0" y="0" width="43" height="30" uuid="3535335e-7244-43d0-be33-494cd2f2f69f"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font fontName="Times New Roman" isBold="true" pdfFontName="Helvetica-Bold"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{gradecount_Sum}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<whenNoDataCell>
+					<cellContents mode="Transparent"/>
+				</whenNoDataCell>
+			</crosstab>
+		</band>
+	</summary>
+</jasperReport>

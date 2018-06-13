@@ -1,16 +1,16 @@
 <APP password="change_password" org="org_id" name="cafe">
 	<MENU name="cafe">
+		<MENU name="Store">
+			<MENU name="Supplier">120</MENU>
+			<MENU name="Product Categories">110</MENU>
+			<MENU name="Supplies">125</MENU>
+		</MENU>
 		<MENU name="Service Desk">
 			<MENU name="Dashboard">1</MENU>
 			<MENU name="Client Forms">25</MENU>
 			<MENU name="Approvals">45</MENU>
 			<MENU name="Employee">80</MENU>
 			<MENU name="Work Type">130</MENU>
-		</MENU>
-		<MENU name="Store">
-			<MENU name="Supplier">120</MENU>
-			<MENU name="Product Categories">110</MENU>
-			<MENU name="Supplies">125</MENU>
 		</MENU>
 		<MENU name="Kitchen">
 			<MENU name="Food Categories">140</MENU>
@@ -39,7 +39,12 @@
 			<MENU role="admin" name="Files">65</MENU>
 			<MENU name="Error Messages">75</MENU>
 		</MENU>
-		<MENU name="Reports"></MENU>
+		<MENU name="Reports">
+			<MENU name="Employees">155</MENU>
+			<MENU name="Menus">160</MENU>
+			<MENU name="Orderfood">165</MENU>
+			<MENU name="Customer order">170</MENU>
+		</MENU>
 	</MENU>
 	<DESK access="open" w="700" h="500" name="Dashboard" key="1">
 		<DASHBOARD w="700" name="Dashboard">
@@ -710,10 +715,9 @@
 			<TEXTFIELD w="75" title="Employee Email">employee_email</TEXTFIELD>
 			<TEXTFIELD w="75" title="Employee Address">employee_address</TEXTFIELD>
 			<TEXTFIELD w="75" title="Work Type Name">work_type_name</TEXTFIELD>
-			<TEXTFIELD w="75" title="Employee User Name">employee_user_name</TEXTFIELD>
-			<TEXTFIELD w="75" title="Employee Password">employee_password</TEXTFIELD>
 			<TEXTDATE w="75" title="Employee Start Date">employee_start_date</TEXTDATE>
 			<TEXTDATE w="75" title="Employee End Date">employee_end_date</TEXTDATE>
+			<CHECKBOX w="75" title="Availability">employee_status</CHECKBOX>
 			<FORM keyfield="employee_id" name="Employees" table="employees">
 				<TEXTFIELD w="150" h="20" x="10" y="10" title="Employee Name">employee_name</TEXTFIELD>
 				<TEXTFIELD w="150" h="20" x="290" y="10" title="Employee Gender">employee_gender</TEXTFIELD>
@@ -722,10 +726,9 @@
 				<TEXTFIELD w="150" h="20" x="10" y="50" title="Employee Email">employee_email</TEXTFIELD>
 				<TEXTFIELD w="150" h="20" x="290" y="50" title="Employee Address">employee_address</TEXTFIELD>
 				<COMBOBOX w="430" h="20" lpfield="work_type_name" x="10" y="70" lptable="worktype" title="Work Type">work_type_id</COMBOBOX>
-				<TEXTFIELD w="150" h="20" x="10" y="90" title="Employee User Name">employee_user_name</TEXTFIELD>
-				<TEXTFIELD w="150" h="20" x="290" y="90" title="Employee Password">employee_password</TEXTFIELD>
 				<TEXTDATE w="150" h="20" x="10" y="110" title="Employee Start Date">employee_start_date</TEXTDATE>
 				<TEXTDATE w="150" h="20" x="10" y="110" title="Employee End Date">employee_End_date</TEXTDATE>
+				<CHECKBOX w="150" h="20" x="290" y="30" title="Status">employee_status</CHECKBOX>
 			</FORM>
 		</GRID>
 	</DESK>
@@ -866,7 +869,7 @@
 		</GRID>
 	</DESK>
 	<DESK noorg="true" w="700" h="550" name="Cart" key="135">
-		<GRID keyfield="cart_id" name="Cart" noorg="true" table="vw_cart">
+		<GRID noorg="true" keyfield="cart_id" name="Cart" table="vw_cart">
 			<TEXTFIELD w="75" title="Customer Name">customer_name</TEXTFIELD>
 			<TEXTFIELD w="75" title="Phone No">phone_no</TEXTFIELD>
 			<TEXTFIELD w="75" title="Ordered Food">food_name</TEXTFIELD>
@@ -878,7 +881,7 @@
 				<COMBOBOX w="430" h="20" lpfield="employee_name" x="10" y="30" lptable="employees" title="Employee ID">employee_id</COMBOBOX>
 				<COMBOBOX w="430" h="20" lpfield="order_id" x="10" y="50" lptable="orderfood" title="Order ID">order_id</COMBOBOX>
 				<COMBOBOX w="430" h="20" lpfield="order_type_name" x="10" y="70" lptable="ordertype" title="Order Type ID">order_type_id</COMBOBOX>
-				<COMBOBOX w="430" h="20" lpfield="food_name" x="10" y="70" lptable="food" default="null" title="Orderfood">food_id</COMBOBOX>
+				<COMBOBOX default="null" w="430" h="20" lpfield="food_name" x="10" y="70" lptable="food" title="Orderfood">food_id</COMBOBOX>
 				<COMBOBOX w="430" h="20" lpfield="menu_id" x="10" y="90" lptable="menus" title="Menu ID">menu_id</COMBOBOX>
 				<CHECKBOX w="150" h="20" x="10" y="110" title="Check Out">check_out</CHECKBOX>
 			</FORM>
@@ -897,7 +900,7 @@
 		</GRID>
 	</DESK>
 	<DESK w="700" h="550" name="Ingredients" key="145">
-		<GRID keyfield="ingeredient_id" name="Ingredients" table="vw_ingredients">
+		<GRID noorg="true" keyfield="ingeredient_id" name="Ingredients" table="vw_ingredients">
 			<TEXTFIELD w="75" title="Ingeredient ID">ingeredient_id</TEXTFIELD>
 			<TEXTFIELD w="75" title="Ingredient Name">ingredient_name</TEXTFIELD>
 			<TEXTFIELD w="75" title="Food Name">food_name</TEXTFIELD>
@@ -926,6 +929,7 @@
 			<TEXTFIELD w="75" title="Table No">table_no</TEXTFIELD>
 			<TEXTDECIMAL w="75" title="Price">price</TEXTDECIMAL>
 			<CHECKBOX w="75" title="Availability">status</CHECKBOX>
+			<TEXTDECIMAL w="75" title="Total">total</TEXTDECIMAL>
 			<FORM keyfield="order_id" name="Orderfood" table="orderfood">
 				<COMBOBOX w="430" h="20" lpfield="customer_name" x="10" y="10" lptable="customers" title="Customer ID">customer_id</COMBOBOX>
 				<COMBOBOX w="430" h="20" lpfield="menu_id" x="10" y="30" lptable="menus" title="Menu ID">menu_id</COMBOBOX>
@@ -938,5 +942,17 @@
 				<COMBOBOX w="430" h="20" lpfield="food_name" x="10" y="130" lptable="food" title="Food ID">food_id</COMBOBOX>
 			</FORM>
 		</GRID>
+	</DESK>
+	<DESK w="700" h="550" name="vw_employees" key="155">
+		<JASPER reportfile="vw_employees.jasper" name="vw_employees"></JASPER>
+	</DESK>
+	<DESK w="700" h="550" name="vw_menus" key="160">
+		<JASPER reportfile="vw_menus.jasper" name="vw_menus"></JASPER>
+	</DESK>
+	<DESK w="700" h="550" name="vw_orderfood" key="165">
+		<JASPER reportfile="vw_orderfood.jasper" name="vw_orderfood"></JASPER>
+	</DESK>
+	<DESK w="700" h="550" name="customer order" key="170">
+		<JASPER reportfile="customer_order.jasper" name="customer order"></JASPER>
 	</DESK>
 </APP>

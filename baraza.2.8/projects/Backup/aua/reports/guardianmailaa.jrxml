@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="guardianmailaa"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="566"
+		 pageHeight="283"
+		 columnWidth="506"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="filterid" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["2006/2007.1"]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT *
+FROM vw_sstudents
+WHERE (session_id='$P!{filterid}')
+AND (guardian_name is not null) AND (approved = true)
+AND (gaddress_country<>'Kenya')
+ORDER BY student_name;]]></queryString>
+
+	<field name="religion_id" class="java.lang.String"/>
+	<field name="religion_name" class="java.lang.String"/>
+	<field name="denomination_id" class="java.lang.String"/>
+	<field name="denomination_name" class="java.lang.String"/>
+	<field name="school_id" class="java.lang.String"/>
+	<field name="school_name" class="java.lang.String"/>
+	<field name="student_id" class="java.lang.String"/>
+	<field name="student_name" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="zipcode" class="java.lang.String"/>
+	<field name="town" class="java.lang.String"/>
+	<field name="address_country" class="java.lang.String"/>
+	<field name="telno" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="guardian_name" class="java.lang.String"/>
+	<field name="gaddress" class="java.lang.String"/>
+	<field name="gzipcode" class="java.lang.String"/>
+	<field name="gtown" class="java.lang.String"/>
+	<field name="gaddress_country" class="java.lang.String"/>
+	<field name="gtelno" class="java.lang.String"/>
+	<field name="gemail" class="java.lang.String"/>
+	<field name="account_number" class="java.lang.String"/>
+	<field name="nationality" class="java.lang.String"/>
+	<field name="nationality_country" class="java.lang.String"/>
+	<field name="sex" class="java.lang.String"/>
+	<field name="marital_status" class="java.lang.String"/>
+	<field name="birth_date" class="java.sql.Date"/>
+	<field name="firstpass" class="java.lang.String"/>
+	<field name="alumnae" class="java.lang.Boolean"/>
+	<field name="post_contacts" class="java.lang.Boolean"/>
+	<field name="on_probation" class="java.lang.Boolean"/>
+	<field name="off_campus" class="java.lang.Boolean"/>
+	<field name="current_contact" class="java.lang.String"/>
+	<field name="current_email" class="java.lang.String"/>
+	<field name="current_tel" class="java.lang.String"/>
+	<field name="mark_id" class="java.lang.Integer"/>
+	<field name="grade" class="java.lang.String"/>
+	<field name="degree_level_id" class="java.lang.String"/>
+	<field name="degree_level_name" class="java.lang.String"/>
+	<field name="freshman" class="java.lang.Integer"/>
+	<field name="sophomore" class="java.lang.Integer"/>
+	<field name="junior" class="java.lang.Integer"/>
+	<field name="senior" class="java.lang.Integer"/>
+	<field name="level_location_id" class="java.lang.Integer"/>
+	<field name="level_location_name" class="java.lang.String"/>
+	<field name="sub_level_id" class="java.lang.String"/>
+	<field name="sub_level_name" class="java.lang.String"/>
+	<field name="special_charges" class="java.lang.Boolean"/>
+	<field name="degree_id" class="java.lang.String"/>
+	<field name="degree_name" class="java.lang.String"/>
+	<field name="student_degree_id" class="java.lang.Integer"/>
+	<field name="completed" class="java.lang.Boolean"/>
+	<field name="started" class="java.sql.Date"/>
+	<field name="cleared" class="java.lang.Boolean"/>
+	<field name="clear_date" class="java.sql.Date"/>
+	<field name="graduated" class="java.lang.Boolean"/>
+	<field name="graduate_date" class="java.sql.Date"/>
+	<field name="drop_out" class="java.lang.Boolean"/>
+	<field name="transfer_in" class="java.lang.Boolean"/>
+	<field name="transfer_out" class="java.lang.Boolean"/>
+	<field name="mathplacement" class="java.lang.Integer"/>
+	<field name="englishplacement" class="java.lang.Integer"/>
+	<field name="session_id" class="java.lang.String"/>
+	<field name="session_year" class="java.lang.String"/>
+	<field name="session" class="java.lang.String"/>
+	<field name="session_start" class="java.sql.Date"/>
+	<field name="late_reg" class="java.sql.Date"/>
+	<field name="late_change" class="java.sql.Date"/>
+	<field name="last_drop" class="java.sql.Date"/>
+	<field name="session_end" class="java.sql.Date"/>
+	<field name="active" class="java.lang.Boolean"/>
+	<field name="assemblysitsqty" class="java.lang.Integer"/>
+	<field name="feesline" class="java.lang.Integer"/>
+	<field name="resline" class="java.lang.Integer"/>
+	<field name="sabathclasses" class="java.lang.Integer"/>
+	<field name="sabathsize" class="java.lang.Integer"/>
+	<field name="residence_id" class="java.lang.String"/>
+	<field name="residence_name" class="java.lang.String"/>
+	<field name="capacity" class="java.lang.Integer"/>
+	<field name="default_rate" class="java.lang.Double"/>
+	<field name="off_campus" class="java.lang.Boolean"/>
+	<field name="residence_sex" class="java.lang.String"/>
+	<field name="residence_dean" class="java.lang.String"/>
+	<field name="sresidence_id" class="java.lang.Integer"/>
+	<field name="residenceoption" class="java.lang.String"/>
+	<field name="rooms" class="java.lang.Integer"/>
+	<field name="residence_charge" class="java.lang.Double"/>
+	<field name="sstudent_id" class="java.lang.Integer"/>
+	<field name="extra_charges" class="java.lang.Double"/>
+	<field name="approved" class="java.lang.Boolean"/>
+	<field name="probation" class="java.lang.Boolean"/>
+	<field name="assemblysit" class="java.lang.Integer"/>
+	<field name="room_number" class="java.lang.Integer"/>
+	<field name="sabathclass" class="java.lang.Integer"/>
+	<field name="curr_balance" class="java.lang.Float"/>
+	<field name="finance_approval" class="java.lang.Boolean"/>
+	<field name="major_approval" class="java.lang.Boolean"/>
+	<field name="depart_approval" class="java.lang.Boolean"/>
+	<field name="overload_approval" class="java.lang.Boolean"/>
+	<field name="finalised" class="java.lang.Boolean"/>
+	<field name="printed" class="java.lang.Boolean"/>
+	<field name="details" class="java.lang.String"/>
+	<field name="unit_charge" class="java.lang.Double"/>
+	<field name="lab_charge" class="java.lang.Double"/>
+	<field name="fees_charge" class="java.lang.Double"/>
+	<field name="prev_session" class="java.lang.String"/>
+	<field name="new_student" class="java.lang.Boolean"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="210"  isSplitAllowed="true" >
+				<elementGroup><!--  Start: 1 !-->
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="181"
+						y="123"
+						width="319"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{guardian_name}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="181"
+						y="155"
+						width="165"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{gaddress}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="403"
+						y="155"
+						width="99"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{gzipcode}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="356"
+						y="155"
+						width="41"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText"
+						positionType="Float">
+							<printWhenExpression><![CDATA[$F{gzipcode}!=null]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<text><![CDATA[Zip]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="181"
+						y="172"
+						width="324"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{gtown}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="181"
+						y="189"
+						width="325"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{gaddress_country}]]></textFieldExpression>
+				</textField>
+				</elementGroup><!-- End 1 !-->
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="230"
+						y="139"
+						width="57"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{student_id}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="280"
+						y="139"
+						width="209"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{student_name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="181"
+						y="139"
+						width="48"
+						height="16"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+				<text><![CDATA[Student:]]></text>
+				</staticText>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

@@ -76,7 +76,7 @@ CREATE TABLE ingredients (
     org_id     		 	integer references orgs,
 	ingredient_name   	varchar(120) NOT NULL,
 	food_id				integer references food,
-	quantity		  	varchar(100) NOT NULL,
+	quantity		  	float,
 	narrative			varchar(250),
 	details         	text
 );
@@ -136,13 +136,13 @@ CREATE TABLE employees(
 	employee_email          varchar(60) NOT NULL,
 	employee_address        varchar(70) NOT NULL,
 	work_type_id            integer references worktype,
-	employee_user_name 	    varchar(60) NOT NULL,
-	employee_password       varchar(60) NOT NULL,
 	employee_start_date     date,
-    employee_end_date       date
+    employee_end_date       date,
+	employee_status			boolean
 );
 	CREATE INDEX employees_org_id ON employees(org_id);
 	CREATE INDEX employees_work_type_id ON employees(work_type_id);
+
 
 
 
@@ -155,7 +155,7 @@ CREATE TABLE orderfood(
 	order_type_id   integer references ordertype,
 	order_date      date,
 	cancel_order    boolean,
-	quantity        varchar(50) NOT NULL,
+	quantity        float,
 	table_no		varchar(15),
 	employee_id     integer references employees,
 	food_id         integer references food

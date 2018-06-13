@@ -1,3 +1,13 @@
+INSERT INTO use_keys (use_key_id, use_key_name, use_function) VALUES
+(6, 'customers' , 0),
+(7, 'employees', 0)
+
+--- Entity types
+INSERT INTO entity_types (org_id, entity_type_name, entity_role, use_key_id) VALUES 
+(0, 'customers', 'customers', 6),
+(0, 'employees', 'employees', 7);
+
+
 
 INSERT INTO suppliers(org_id,supplier_name,supplier_phone,supplier_email,supplier_address) VALUES (0,'Peter', 0700878675,'peter@me.com','2500 Eldoret');
 INSERT INTO suppliers(org_id,supplier_name,supplier_phone,supplier_email,supplier_address) VALUES (0,'Vivian', 0723263784,'vyvy@yahoo.com','5010 Kapsabet');
@@ -37,19 +47,19 @@ INSERT INTO worktype(org_id,work_type_name) VALUES (0,'Manager');
 
 INSERT INTO employees(org_id,employee_name,employee_gender,employee_age,employee_phone,employee_email,employee_address,
 employee_user_name,employee_password,employee_start_date,employee_end_date ) 
-VALUES (0,'ruth','female',22,0799786456,'ruth@ueab.ac.ke','2500 Eldoret','ruthy','566gt','2017-01-01','2020-01-01');
+VALUES (0,'ruth','female',22,0799786456,'ruth@ueab.ac.ke','2500 Eldoret','2017-01-01','2020-01-01');
 INSERT INTO employees(org_id,employee_name,employee_gender,employee_age,employee_phone,employee_email,employee_address,
 employee_user_name,employee_password,employee_start_date,employee_end_date ) 
-VALUES (0,'fabian','male',26,0703564563,'kilui@ueab.ac.ke','100 kapsabet','kiluii','567gt','2018-01-01','2020-01-01');
+VALUES (0,'fabian','male',26,0703564563,'kilui@ueab.ac.ke','100 kapsabet','2018-01-01','2020-01-01');
 INSERT INTO employees(org_id,employee_name,employee_gender,employee_age,employee_phone,employee_email,employee_address,
 employee_user_name,employee_password,employee_start_date,employee_end_date ) 
-VALUES (0,'Vivian','female',24,0734556677,'vy@ueab.ac.ke','1000 Nairobi','vyvy','568gt','2018-01-05','2020-01-05');
+VALUES (0,'Vivian','female',24,0734556677,'vy@ueab.ac.ke','1000 Nairobi','2018-01-05','2020-01-05');
 INSERT INTO employees(org_id,employee_name,employee_gender,employee_age,employee_phone,employee_email,employee_address,
 employee_user_name,employee_password,employee_start_date,employee_end_date ) 
-VALUES (0,'Martin','male',28,0756778657,'martin@ueab.ac.ke','1000 Nairobi','Marto','569gt','2018-11-01','2021-01-05');
+VALUES (0,'Martin','male',28,0756778657,'martin@ueab.ac.ke','1000 Nairobi','2018-11-01','2021-01-05');
 INSERT INTO employees(org_id,employee_name,employee_gender,employee_age,employee_phone,employee_email,employee_address,
 employee_user_name,employee_password,employee_start_date,employee_end_date ) 
-VALUES (0,'Rhodah','female',27,077778657,'rhodah@sq.ac.ke','5050 Nairobi','Rhods','569gt','2018-11-01','2021-01-05');
+VALUES (0,'Rhodah','female',27,077778657,'rhodah@sq.ac.ke','5050 Nairobi','2018-11-01','2021-01-05');
 
 
 

@@ -1,0 +1,118 @@
+<APP name="AUA">
+	<MENU name="General Information">
+		<MENU name="Information">
+			<MENU name="School">1</MENU>
+			<MENU name="Student Application">11</MENU>
+			<MENU name="Employer Application">12</MENU>
+		</MENU>
+	</MENU>
+	<DESK w="700" h="500" name="School" key="1">
+		<GRID noorg="true" keyfield="school_id" name="School" orderby="school_id" table="schools">
+			<TEXTFIELD w="75" title="School ID">school_id</TEXTFIELD>
+			<TEXTFIELD w="250" title="School">school_name</TEXTFIELD>
+			<GRID noorg="true" reporttitle="school_name" keyfield="department_id" name="Department" orderby="department_id" linkfield="school_id" table="vw_departments">
+				<TEXTFIELD w="75" title="Department ID">department_id</TEXTFIELD>
+				<TEXTFIELD w="250" title="Department">department_name</TEXTFIELD>
+				<GRID noorg="true" reporttitle="department_name" keyfield="major_id" name="Majors" linkfield="department_id" table="vw_majors">
+					<TEXTFIELD w="250" title="Majors Name">major_name</TEXTFIELD>
+					<CHECKBOX w="75" format="boolean" title="Core" ischar="true">major</CHECKBOX>
+					<GRID noorg="true" keyfield="major_content_id" name="Majors Contents" orderby="course_id" where="(active = true)" linkfield="major_id" table="vw_major_contents">
+						<TEXTFIELD w="75" title="Course ID">course_id</TEXTFIELD>
+						<TEXTFIELD w="250" title="Course Title">course_title</TEXTFIELD>
+						<TEXTFIELD w="75" title="Credit Hours">credit_hours</TEXTFIELD>
+						<TEXTFIELD w="75" title="Content Type">content_type_name</TEXTFIELD>
+						<CHECKBOX w="75" format="boolean" title="No GPA" ischar="true">no_gpa</CHECKBOX>
+						<GRID noorg="true" display="form" keyfield="major_content_id" w="570" name="Courses Details" lw="100" linkfield="major_content_id" table="vw_major_contents">
+							<TEXTFIELD w="40" title="Course ID">course_id</TEXTFIELD>
+							<TEXTFIELD w="70" title="Course Title">course_title</TEXTFIELD>
+							<TEXTFIELD w="70" title="Hours">credit_hours</TEXTFIELD>
+							<TEXTFIELD w="70" title="Year Taken">year_taken</TEXTFIELD>
+							<TEXTFIELD w="70" title="Details">course_details</TEXTFIELD>
+							<GRID noorg="true" keyfield="prerequisite_id" name="Prerequisite" linkfield="major_content_id" table="vw_prerequisite">
+								<TEXTFIELD w="75" title="Course ID">course_id</TEXTFIELD>
+								<TEXTFIELD w="300" title="Course Title">course_title</TEXTFIELD>
+								<TEXTFIELD w="75" title="Level">option_level</TEXTFIELD>
+								<TEXTFIELD w="75" title="Grade">grade_name</TEXTFIELD>
+							</GRID>
+						</GRID>
+					</GRID>
+				</GRID>
+				<GRID noorg="true" keyfield="course_id" name="Courses Listing" orderby="course_id" where="(is_current = true)" linkfield="department_id" table="courses">
+					<TEXTFIELD w="75" title="Course ID">course_id</TEXTFIELD>
+					<TEXTFIELD w="250" title="Course Title">course_title</TEXTFIELD>
+					<TEXTFIELD w="70" title="Hours">credit_hours</TEXTFIELD>
+					<CHECKBOX w="75" format="boolean" title="No GPA" ischar="true">no_gpa</CHECKBOX>
+					<GRID noorg="true" display="form" keyfield="course_id" w="570" name="Courses Details" lw="100" linkfield="course_id" table="courses">
+						<TEXTFIELD w="40" title="Course ID">course_id</TEXTFIELD>
+						<TEXTFIELD w="70" title="Course Title">course_title</TEXTFIELD>
+						<TEXTFIELD w="70" title="Hours">credit_hours</TEXTFIELD>
+						<TEXTFIELD w="70" title="Year Taken">year_taken</TEXTFIELD>
+						<TEXTFIELD w="70" title="Details">details</TEXTFIELD>
+						<GRID noorg="true" name="Prerequisite" linkfield="course_id" table="vw_prereq">
+							<TEXTFIELD w="75" title="Course ID">course_id</TEXTFIELD>
+							<TEXTFIELD w="300" title="Course Title">course_title</TEXTFIELD>
+							<TEXTFIELD w="75" title="Level">option_level</TEXTFIELD>
+							<TEXTFIELD w="75" title="Grade">grade_name</TEXTFIELD>
+						</GRID>
+					</GRID>
+				</GRID>
+				<GRID noorg="true" display="form" keyfield="department_id" w="570" name="Department Details" lw="100" linkfield="department_id" table="vw_departments">
+					<TEXTFIELD title="School ID">school_id</TEXTFIELD>
+					<TEXTFIELD title="School Name">school_name</TEXTFIELD>
+					<TEXTFIELD title="Department Name">Department_name</TEXTFIELD>
+					<TEXTFIELD title="Philosopy">philosopy</TEXTFIELD>
+					<TEXTFIELD title="Vision">vision</TEXTFIELD>
+					<TEXTFIELD title="Mission">mission</TEXTFIELD>
+					<TEXTFIELD title="Objectives">objectives</TEXTFIELD>
+					<TEXTFIELD title="Exposures">exposures</TEXTFIELD>
+					<TEXTFIELD title="Oppotunities">oppotunities</TEXTFIELD>
+					<TEXTFIELD title="Details">details</TEXTFIELD>
+				</GRID>
+			</GRID>
+			<GRID noorg="true" display="form" keyfield="school_id" w="550" name="School Details" lw="120" linkfield="school_id" table="schools">
+				<TEXTFIELD title="School ID">school_id</TEXTFIELD>
+				<TEXTFIELD title="School Name">school_name</TEXTFIELD>
+				<TEXTFIELD title="Philosopy">philosopy</TEXTFIELD>
+				<TEXTFIELD title="Vision">vision</TEXTFIELD>
+				<TEXTFIELD title="Mission">mission</TEXTFIELD>
+				<TEXTFIELD title="Objectives">objectives</TEXTFIELD>
+				<TEXTFIELD title="Details">details</TEXTFIELD>
+			</GRID>
+		</GRID>
+	</DESK>
+	<DESK w="700" h="500" name="Application for Admission" key="11">
+		<FORM noorg="true" audit="false" keyfield="entity_id" name="Application for Admission" del="false" table="entitys">
+			<DEFAULT default="8">entity_type_id</DEFAULT>
+			<TEXTFIELD w="430" h="20" x="10" y="10" title="Full Name *">entity_name</TEXTFIELD>
+			<TEXTFIELD w="430" h="20" x="10" y="30" title="Email *">user_name</TEXTFIELD>
+			<COMBOBOX w="430" h="20" lpfield="form_name" x="10" y="50" lptable="forms" where="(use_key = 1)" title="Application" lpkey="form_id">selection_id</COMBOBOX>
+			<COMBOBOX w="430" h="20" lpfield="org_name" x="10" y="70" lptable="orgs" title="Campus">org_id</COMBOBOX>
+			<GRID noorg="true" display="form" keyfield="sys_news_id" name="News" where="(sys_news_id = 1)" table="sys_news">
+				<TEXTAREA w="530" h="170" x="10" y="2" title="Advice">details</TEXTAREA>
+			</GRID>
+		</FORM>
+	</DESK>
+	<DESK w="700" h="500" name="Employer Access" key="12">
+		<FORM noorg="true" keyfield="address_id" name="Employer Access" table="address">
+			<DEFAULT default="entitys" w="150">table_name</DEFAULT>
+			<TEXTFIELD w="430" h="20" x="10" y="10" title="Company Name">address_name</TEXTFIELD>
+			<TEXTFIELD w="150" h="20" x="10" y="30" title="Post Office Box">post_office_box</TEXTFIELD>
+			<TEXTFIELD w="150" h="20" x="290" y="30" title="Postal Code">postal_code</TEXTFIELD>
+			<TEXTFIELD w="430" h="20" x="10" y="50" title="Premises">premises</TEXTFIELD>
+			<TEXTFIELD w="430" h="20" x="10" y="70" title="Street">street</TEXTFIELD>
+			<TEXTFIELD w="150" h="20" x="10" y="90" title="Town">town</TEXTFIELD>
+			<COMBOBOX noorg="true" default="KE" w="430" h="20" lpfield="sys_country_name" x="10" y="110" lptable="sys_countrys" title="Country">sys_country_id</COMBOBOX>
+			<TEXTFIELD w="250" h="20" x="10" y="130" title="Phone Number">phone_number</TEXTFIELD>
+			<TEXTFIELD w="50" h="20" x="390" y="130" title="Extension">extension</TEXTFIELD>
+			<TEXTFIELD w="430" h="20" x="10" y="150" title="Mobile">mobile</TEXTFIELD>
+			<TEXTFIELD w="430" h="20" x="10" y="170" title="Fax">fax</TEXTFIELD>
+			<TEXTFIELD w="430" h="20" x="10" y="190" title="Email">email</TEXTFIELD>
+			<TEXTFIELD w="430" h="20" x="10" y="210" title="Website">website</TEXTFIELD>
+			<TEXTFIELD w="150" h="20" x="10" y="230" title="Password">first_password</TEXTFIELD>
+			<TEXTAREA w="430" h="70" x="10" y="250" title="Details">details</TEXTAREA>
+			<GRID noorg="true" display="form" keyfield="sys_news_id" name="News" where="(sys_news_id = 2)" table="sys_news">
+				<TEXTAREA w="530" h="170" x="10" y="2" title="Advice">details</TEXTAREA>
+			</GRID>
+		</FORM>
+	</DESK>
+</APP>

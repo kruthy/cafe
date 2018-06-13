@@ -1,0 +1,49 @@
+<APP name="UMIS" org="org_id" password="change_password">
+	<MENU name="Alumnae" role="records">
+		<MENU name="Alumnae">1</MENU>
+		<MENU name="Reports">
+			<MENU name="Alumnae">10</MENU>
+		</MENU>
+	</MENU>
+	<DESK w="725" name="Alumnae" key="1" h="650">
+		<GRID limit="200" name="Alumnae" keyfield="student_id" orderby="student_id" table="vw_students" where="alumnae = true">
+			<TEXTFIELD w="40" title="Student ID">student_id</TEXTFIELD>
+			<TEXTFIELD w="40" title="Student Name">student_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Sex">sex</TEXTFIELD>
+			<TEXTFIELD w="40" title="School">school_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Denomination">denomination_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Nationality">Nationality</TEXTFIELD>
+			<FORM name="Students" keyfield="student_id" table="students">
+				<TEXTFIELD w="150" title="Student ID" y="10" h="20" x="10">student_id</TEXTFIELD>
+				<TEXTFIELD w="150" title="Student Name" y="10" h="20" x="290">student_name</TEXTFIELD>
+				<TEXTFIELD w="150" title="Address" y="30" h="20" x="10">address</TEXTFIELD>
+				<TEXTFIELD w="150" title="Zipcode" y="30" h="20" x="290">zipcode</TEXTFIELD>
+				<TEXTFIELD w="150" title="Town" y="50" h="20" x="10">town</TEXTFIELD>
+				<COMBOBOX w="150" title="Country" lptable="sys_countrys" noorg="true" lpkey="country_id" y="50" h="20" x="290" lpfield="countryname">sys_country_code_id</COMBOBOX>
+				<TEXTFIELD w="250" title="Tel No" y="70" h="20" x="10">telno</TEXTFIELD>
+				<TEXTFIELD w="250" title="Email" y="90" h="20" x="10">email</TEXTFIELD>
+				<COMBOLIST w="50" title="Marital Status" y="110" h="20" x="10">Marital_Status
+					<DATA>S</DATA>
+					<DATA>M</DATA>
+				</COMBOLIST>
+				<TEXTAREA w="430" title="Details" y="130" h="70" x="10">details</TEXTAREA>
+			</FORM>
+			<GRID name="Student's Degree" keyfield="student_degree_id" linkfield="student_id" table="vw_studentdegrees" noorg="true">
+				<TEXTFIELD w="140" title="Degree">degree_name</TEXTFIELD>
+				<TEXTFIELD w="140" title="Sub Level">sublevel_name</TEXTFIELD>
+				<TEXTFIELD w="40" title="Completed">completed</TEXTFIELD>
+				<GRID name="Student's Major" keyfield="student_major_id" linkfield="student_degree_id" table="vw_student_majors" noorg="true">
+					<TEXTFIELD w="40" title="Major ID">major_id</TEXTFIELD>
+					<TEXTFIELD w="140" title="Major Name">major_name</TEXTFIELD>
+					<TEXTFIELD w="40" title="Core Major">major</TEXTFIELD>
+					<TEXTFIELD w="40" title="Pre Major">premajor</TEXTFIELD>
+				</GRID>
+				<GRID name="Printed" keyfield="transcript_print_id" updatetable="transcript_print" linkfield="student_degree_id" table="vw_transcript_print" noorg="true" key="9">
+					<TEXTFIELD w="15" title="Date Printed">print_date</TEXTFIELD>
+					<TEXTFIELD w="15" title="Printed By">entity_name</TEXTFIELD>
+					<TEXTFIELD w="35" title="Narrative" edit="true">narrative</TEXTFIELD>
+				</GRID>
+			</GRID>
+		</GRID>
+	</DESK>
+</APP>

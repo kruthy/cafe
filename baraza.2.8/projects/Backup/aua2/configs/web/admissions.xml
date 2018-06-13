@@ -1,0 +1,494 @@
+<APP name="UMIS" org="org_id" password="change_password">
+	<MENU name="UMIS Admisions" role="admisions">
+		<MENU name="Entries">
+			<MENU name="Applications">3</MENU>
+			<MENU name="Admited Students">1</MENU>
+			<MENU name="Admit Students">2</MENU>
+			<MENU name="Registrations">4</MENU>
+			<MENU name="Students">11</MENU>
+			<MENU name="Accepted">7</MENU>
+			<MENU name="Evaluation">5</MENU>
+		</MENU>
+		<MENU name="Reports">
+			<MENU name="Registrations">104</MENU>
+			<MENU name="New Students">209</MENU>
+			<MENU name="New Students By Year">210</MENU>
+			<MENU name="New Students Progress">211</MENU>
+			<MENU name="Admision Marks Summary">441</MENU>
+			<MENU name="Admision Marks List">442</MENU>
+			<MENU name="Students Progress">443</MENU>
+			<MENU name="New Students Level Enrolment">221</MENU>
+			<MENU name="Yearly Enrollment">402</MENU>
+		</MENU>
+		<MENU name="Control Panel">
+			<MENU name="Contact Types">21</MENU>
+			<MENU name="Health Items">22</MENU>
+			<MENU name="Reports">
+				<MENU name="Contact Types">101</MENU>
+				<MENU name="Health Items">102</MENU>
+			</MENU>
+		</MENU>
+	</MENU>
+	<DESK w="700" name="Admited Students" key="1" h="500">
+		<GRID limit="100" name="Admited Students" keyfield="registration_id" orderby="registration_id desc" table="registrations" noorg="true" where="(existing_id is not null)">
+			<TEXTFIELD w="80" title="Reg. ID">registration_id</TEXTFIELD>
+			<TEXTFIELD w="100" title="Application Date" format="date">application_date</TEXTFIELD>
+			<TEXTFIELD w="100" title="First Name">first_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Middle name">middle_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Last Name">last_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Gender">sex</TEXTFIELD>
+			<TEXTFIELD w="75" title="Student ID">existing_id</TEXTFIELD>
+			
+		</GRID>
+	</DESK>
+	<DESK w="700" name="Applicants" key="2" h="500">
+		<GRID limit="100" name="Applicants" keyfield="registration_id" orderby="registration_id desc" table="registrations" noorg="true" where="(existing_id is null)">
+			<TEXTFIELD w="80" title="Reg. ID">registration_id</TEXTFIELD>
+			<TEXTFIELD w="100" title="Application Date" format="date">application_date</TEXTFIELD>
+			<TEXTFIELD w="100" title="First Name">first_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Middle name">middle_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Last Name">last_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Gender">sex</TEXTFIELD>
+			<ACTIONS>
+				<ACTION fnct="ins_registrations()">Admit</ACTION>
+			</ACTIONS>
+		</GRID>
+	</DESK>
+	<DESK w="700" name="Approvals" key="3" h="500">
+		<GRID name="Approvals" keyfield="approval_id" table="vw_approvals_entitys" params="table_name, table_id" where="(approve_status = 'Completed')" user="entity_id">
+			<TEXTFIELD w="25" title="ID">approval_id</TEXTFIELD>
+			<TEXTFIELD w="75" title="Workflow">workflow_name</TEXTFIELD>
+			<TEXTFIELD w="75" title="From">org_entity_name</TEXTFIELD>
+			<TEXTFIELD w="75" title="Group">source_entity_name</TEXTFIELD>
+			<TEXTFIELD w="75" title="Approval">approval_entity_name</TEXTFIELD>
+			<TEXTFIELD w="75" title="Level">approval_level</TEXTFIELD>
+			<TEXTFIELD w="175" title="Narrative">approval_narrative</TEXTFIELD>
+			<TEXTTIMESTAMP w="75" title="Date">completion_date</TEXTTIMESTAMP>
+			<ACTIONS>
+				<ACTION fnct="upd_approvals" phase="2">Approve</ACTION>
+				<ACTION fnct="upd_approvals" phase="3">Reject</ACTION>
+				<ACTION fnct="upd_approvals" phase="4">Review</ACTION>
+			</ACTIONS>
+			<GRID name="Completed Forms" keyfield="entry_form_id" table="vw_entry_forms" viewfilter="table_name=entry_forms" linkparams="table_id=workflow_table_id">
+				<TEXTFIELD w="150" title="Form Name">form_name</TEXTFIELD>
+				<TEXTFIELD w="75" title="Approve Status">approve_status</TEXTFIELD>
+				<TEXTTIMESTAMP w="100" title="Application Date">application_date</TEXTTIMESTAMP>
+				<TEXTTIMESTAMP w="100" title="Completion Date">completion_date</TEXTTIMESTAMP>
+				<TEXTTIMESTAMP w="100" title="Approve Date">action_date</TEXTTIMESTAMP>
+				<BROWSER title="View Form" action="ENTRYFORM" linkfield="actionvalue" baseurl="http://localhost:9090/form.jsp?action=ENTRYFORM" blankpage="true" disabled="yes">entry_form_id</BROWSER>
+				<FILES username="root" repository="http://localhost:8080/repository/webdav/files/" name="Documents" keyfield="sys_file_id" linkfield="table_id" table="sys_files" params="table_name" noorg="true" where="(table_name='entry_forms')" filetable="entry_forms" password="enter">
+					<TEXTFIELD w="75" title="File ID">sys_file_id</TEXTFIELD>
+					<TEXTFIELD w="175" title="File Name">file_name</TEXTFIELD>
+					<TEXTFIELD w="75" title="File Type">file_type</TEXTFIELD>
+					<TEXTFIELD w="75" title="File Size">file_size</TEXTFIELD>
+				</FILES>
+			</GRID>
+			<GRID name="Forwards" keyfield="approval_id" linkfield="forward_id" table="vw_approvals">
+				<TEXTFIELD w="25" title="ID">approval_id</TEXTFIELD>
+				<TEXTFIELD w="75" title="Workflow">workflow_name</TEXTFIELD>
+				<TEXTFIELD w="75" title="From">org_entity_name</TEXTFIELD>
+				<TEXTFIELD w="75" title="To">app_entity_name</TEXTFIELD>
+				<TEXTFIELD w="75" title="Status">approve_status</TEXTFIELD>
+				<TEXTFIELD w="175" title="Narrative">approval_narrative</TEXTFIELD>
+				<FORM name="Forwards" keyfield="approval_id" linkfield="forward_id" table="approvals" th="210">
+					<USERFIELD>org_entity_id</USERFIELD>
+					<COMBOBOX w="430" title="Forward To" lptable="entitys" lpkey="entity_id" y="10" h="20" x="10" lpfield="entity_name">app_entity_id</COMBOBOX>
+					<TEXTFIELD w="150" title="Escalation Days" default="0" y="30" h="20" x="10">escalation_days</TEXTFIELD>
+					<TEXTFIELD w="150" title="Escalation Hours" default="3" y="30" h="20" x="290">escalation_hours</TEXTFIELD>
+					<TEXTFIELD w="430" title="Approval Narrative" y="50" h="20" x="10">approval_narrative</TEXTFIELD>
+					<TEXTAREA w="530" tab="To Be Done" y="2" h="170" x="10">to_be_done</TEXTAREA>
+					<TEXTAREA w="530" tab="What is Done" y="2" h="170" disabled="true" x="10">what_is_done</TEXTAREA>
+					<TEXTAREA w="530" tab="Details" y="2" h="170" x="10">details</TEXTAREA>
+				</FORM>
+			</GRID>
+			<GRID name="Checklists" keyfield="approval_checklist_id" linkfield="approval_id" table="approval_checklists">
+				<TEXTFIELD w="275" title="Requirement">requirement</TEXTFIELD>
+				<CHECKBOX w="75" title="Manditory">manditory</CHECKBOX>
+				<CHECKBOX w="75" title="Done">done</CHECKBOX>
+				<TEXTFIELD w="175" title="Narrative">narrative</TEXTFIELD>
+				<ACTIONS>
+					<ACTION fnct="upd_checklist" phase="1">Approve</ACTION>
+					<ACTION fnct="upd_checklist" phase="2">Reject</ACTION>
+				</ACTIONS>
+			</GRID>
+			<FORM name="Review" keyfield="approval_id" table="approvals">
+				<TEXTAREA w="530" tab="To Be Done" y="2" h="170" x="10">to_be_done</TEXTAREA>
+				<TEXTAREA w="530" tab="What Done" y="2" h="170" x="10">what_is_done</TEXTAREA>
+				<TEXTAREA w="530" tab="Review Advice" y="2" h="170" x="10">review_advice</TEXTAREA>
+				<TEXTAREA w="530" tab="Details" y="2" h="170" x="10">details</TEXTAREA>
+			</FORM>
+		</GRID>
+		<GRID name="Forwards" keyfield="approval_id" table="vw_approvals" params="table_name, table_id" where="(approve_status = 'Completed')" user="app_entity_id">
+			<TEXTFIELD w="25" title="ID">approval_id</TEXTFIELD>
+			<TEXTFIELD w="75" title="Workflow">workflow_name</TEXTFIELD>
+			<TEXTFIELD w="75" title="From">org_entity_name</TEXTFIELD>
+			<TEXTFIELD w="75" title="Group">source_entity_name</TEXTFIELD>
+			<TEXTFIELD w="75" title="Approval">approval_entity_name</TEXTFIELD>
+			<TEXTFIELD w="75" title="Level">approval_level</TEXTFIELD>
+			<TEXTFIELD w="175" title="Narrative">approval_narrative</TEXTFIELD>
+			<TEXTTIMESTAMP w="75" title="Date">completion_date</TEXTTIMESTAMP>
+			<ACTIONS>
+				<ACTION fnct="upd_approvals" phase="2">Approve</ACTION>
+				<ACTION fnct="upd_approvals" phase="3">Reject</ACTION>
+				<ACTION fnct="upd_approvals" phase="4">Review</ACTION>
+			</ACTIONS>
+			<GRID name="Completed Forms" keyfield="entry_form_id" table="vw_entry_forms" viewfilter="table_name=entry_forms" linkparams="table_id=workflow_table_id">
+				<TEXTFIELD w="150" title="Form Name">form_name</TEXTFIELD>
+				<TEXTFIELD w="75" title="Approve Status">approve_status</TEXTFIELD>
+				<TEXTTIMESTAMP w="100" title="Application Date">application_date</TEXTTIMESTAMP>
+				<TEXTTIMESTAMP w="100" title="Completion Date">completion_date</TEXTTIMESTAMP>
+				<TEXTTIMESTAMP w="100" title="Approve Date">action_date</TEXTTIMESTAMP>
+				<BROWSER name="View Form" linkfield="actionvalue" baseurl="http://localhost:9090/form.jsp?action=ENTRYFORM" blankpage="true" disabled="yes"></BROWSER>
+			</GRID>
+			<GRID name="Forwards" keyfield="approval_id" linkfield="forward_id" table="vw_approvals">
+				<TEXTFIELD w="25" title="ID">approval_id</TEXTFIELD>
+				<TEXTFIELD w="75" title="Workflow">workflow_name</TEXTFIELD>
+				<TEXTFIELD w="75" title="From">org_entity_name</TEXTFIELD>
+				<TEXTFIELD w="75" title="To">app_entity_name</TEXTFIELD>
+				<TEXTFIELD w="75" title="Status">approve_status</TEXTFIELD>
+				<TEXTFIELD w="175" title="Narrative">approval_narrative</TEXTFIELD>
+				<FORM name="Forwards" keyfield="approval_id" linkfield="forward_id" table="approvals" th="210">
+					<USERFIELD>org_entity_id</USERFIELD>
+					<COMBOBOX w="430" title="Forward To" lptable="entitys" lpkey="entity_id" y="10" h="20" x="10" lpfield="entity_name">app_entity_id</COMBOBOX>
+					<TEXTFIELD w="150" title="Escalation Days" default="0" y="30" h="20" x="10">escalation_days</TEXTFIELD>
+					<TEXTFIELD w="150" title="Escalation Hours" default="3" y="30" h="20" x="290">escalation_hours</TEXTFIELD>
+					<TEXTFIELD w="430" title="Approval Narrative" y="50" h="20" x="10">approval_narrative</TEXTFIELD>
+					<TEXTAREA w="530" tab="To Be Done" y="2" h="170" x="10">to_be_done</TEXTAREA>
+					<TEXTAREA w="530" tab="What is Done" y="2" h="170" disabled="true" x="10">what_is_done</TEXTAREA>
+					<TEXTAREA w="530" tab="Details" y="2" h="170" x="10">details</TEXTAREA>
+				</FORM>
+			</GRID>
+			<GRID name="Checklists" keyfield="approval_checklist_id" linkfield="approval_id" table="approval_checklists">
+				<TEXTFIELD w="275" title="Requirement">requirement</TEXTFIELD>
+				<CHECKBOX w="75" title="Manditory">manditory</CHECKBOX>
+				<CHECKBOX w="75" title="Done">done</CHECKBOX>
+				<TEXTFIELD w="175" title="Narrative">narrative</TEXTFIELD>
+				<ACTIONS>
+					<ACTION fnct="upd_checklist" phase="1">Approve</ACTION>
+					<ACTION fnct="upd_checklist" phase="2">Reject</ACTION>
+				</ACTIONS>
+			</GRID>
+			<FORM name="Review" keyfield="approval_id" table="approvals">
+				<TEXTAREA w="530" tab="To Be Done" y="2" h="170" x="10">to_be_done</TEXTAREA>
+				<TEXTAREA w="530" tab="What Done" y="2" h="170" x="10">what_is_done</TEXTAREA>
+				<TEXTAREA w="530" tab="Review Advice" y="2" h="170" x="10">review_advice</TEXTAREA>
+				<TEXTAREA w="530" tab="Details" y="2" h="170" x="10">details</TEXTAREA>
+			</FORM>
+		</GRID>
+	</DESK>
+	<DESK w="585" name="Contact Types" key="21" h="500">
+		<GRID name="Contact Types" keyfield="contact_type_id" table="contact_types" noorg="true">
+			<TEXTFIELD w="40" title="Contact Type">contact_type_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Primary Contact">primarycontact</TEXTFIELD>
+			<FORM name="Contact Types" keyfield="contact_type_id" linkfield="contact_type_id" table="contact_types" noorg="true">
+				<TEXTFIELD w="430" title="Contact Type" y="10" h="20" x="10">contact_type_name</TEXTFIELD>
+				<CHECKBOX w="50" title="Primary Contact" y="30" h="20" x="10">primarycontact</CHECKBOX>
+				<TEXTAREA w="430" title="Narrative" y="50" h="90" x="10">narrative</TEXTAREA>
+			</FORM>
+		</GRID>
+	</DESK>
+	<DESK w="585" name="Health Items" key="22" h="500">
+		<GRID name="health Items" keyfield="health_item_id" table="healthitems" noorg="true">
+			<TEXTFIELD w="40" title="Health Item">health_item_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Narrative">narrative</TEXTFIELD>
+			<FORM name="Health Items" keyfield="health_item_id" linkfield="health_item_id" table="healthitems" noorg="true">
+				<TEXTFIELD w="430" title="Health Item" y="10" h="20" x="10">health_item_name</TEXTFIELD>
+				<TEXTAREA w="430" title="Narrative" y="30" h="70" x="10">narrative</TEXTAREA>
+			</FORM>
+		</GRID>
+	</DESK>
+	<DESK w="765" name="General Information" key="4" h="595">
+		<GRID limit="250" name="General Information" keyfield="registration_id" orderby="registration_id desc" table="registrations" noorg="true">
+			<TEXTFIELD w="80" title="Reg. ID">registration_id</TEXTFIELD>
+			<TEXTFIELD w="100" title="Application Date">application_date</TEXTFIELD>
+			<TEXTFIELD w="100" title="First Name">first_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Middle name">middle_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Last Name">last_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Sex">sex</TEXTFIELD>
+			<TEXTFIELD w="150" title="ID">existing_id</TEXTFIELD>
+			<TEXTFIELD w="150" title="Pass">firstpass</TEXTFIELD>
+			<FORM tw="570" name="General Information" keyfield="registration_id" table="registrations" noorg="true" th="150">
+				<TEXTFIELD w="150" title="First Name" y="10" h="20" x="10">first_name</TEXTFIELD>
+				<TEXTFIELD w="150" title="Middle Name" y="10" h="20" x="290">middle_name</TEXTFIELD>
+				<TEXTFIELD w="150" title="Last Name" y="30" h="20" x="10">last_name</TEXTFIELD>
+				<COMBOLIST w="150" title="Gender" y="30" h="20" x="290">sex
+					<DATA>M</DATA>
+					<DATA>F</DATA>
+				</COMBOLIST>
+				<COMBOLIST w="150" title="Marital Status" y="50" h="20" x="10">marital_status
+					<DATA>S</DATA>
+					<DATA>M</DATA>
+				</COMBOLIST>
+				<COMBOBOX w="150" title="Denomination" lptable="denominations" noorg="true" lpkey="denomination_id" y="50" h="20" x="290" lpfield="denomination_name">denomination_id</COMBOBOX>
+				<TEXTFIELD w="150" title="EMail" y="70" h="20" x="10">email</TEXTFIELD>
+				<TEXTDATE w="150" title="Birth Date" y="70" h="20" x="290">birth_date</TEXTDATE>
+				<COMBOBOX w="150" title="Nationality" lptable="sys_countrys" noorg="true" lpkey="sys_country_id" y="90" h="20" x="290" lpfield="sys_country_name">nationality_id</COMBOBOX>
+				<COMBOBOX w="150" title="Citizenship" lptable="sys_countrys" noorg="true" lpkey="sys_country_id" y="110" h="20" x="10" lpfield="sys_country_name">citizenship_id</COMBOBOX>
+				<COMBOBOX w="150" title="Resident country" lptable="sys_countrys" noorg="true" lpkey="sys_country_id" y="110" h="20" x="290" lpfield="sys_country_name">residence_id</COMBOBOX>
+				<COMBOBOX w="430" title="Degree" lptable="degrees" tab="Selection" noorg="true" y="0" h="20" x="10" lpfield="degree_name">degree_id</COMBOBOX>
+				<COMBOBOX w="430" title="Major" lptable="majors" tab="Selection" noorg="true" y="20" h="20" x="10" lpfield="major_name">major_id</COMBOBOX>
+				<COMBOBOX w="430" title="Sub level" lptable="sub_levels" tab="Selection" noorg="true" y="40" h="20" x="10" lpfield="sub_level_name">sublevel_id</COMBOBOX>
+		
+				<COMBOBOX w="70" title="O-Level Mark" lptable="marks" tab="Admision" noorg="true" y="0" h="20" x="290" lpfield="grade">mark_id</COMBOBOX>
+			
+				<CHECKBOX w="50" title="Pre Major" tab="Admision" y="20" h="20" x="290">pre_major</CHECKBOX>
+				
+				<COMBOBOX w="250" title="Trimester" lptable="sessions" tab="Admision" noorg="true" lpkey="semester_id" y="60" h="20" x="10" lpfield="semester_id">session_id</COMBOBOX>
+				<TEXTAREA w="650" tab="Details" y="2" h="120" x="10">details</TEXTAREA>
+			</FORM>
+			<GRID name="Registration Contacts" keyfield="reg_contact_id" linkfield="registration_id" table="reg_contacts" noorg="true">
+				<TEXTFIELD w="40" title="Contact Name">reg_contact_name</TEXTFIELD>
+				<TEXTFIELD w="40" title="Telephone Num">telephone</TEXTFIELD>
+				<TEXTFIELD w="40" title="Address">address</TEXTFIELD>
+				<TEXTFIELD w="40" title="Email">email</TEXTFIELD>
+				<FORM name="Registration Contacts" keyfield="reg_contact_id" linkfield="registration_id" table="reg_contacts" noorg="true">
+					<COMBOBOX w="430" title="Contact Type" lptable="contact_types" noorg="true" lpkey="contact_type_id" y="10" h="20" x="10" lpfield="contact_type_name">contact_type_id</COMBOBOX>
+					<TEXTFIELD w="150" title="Contact Name" y="30" h="20" x="10">reg_contact_name</TEXTFIELD>
+					<TEXTFIELD w="150" title="Telephone Num" y="30" h="20" x="290">telephone</TEXTFIELD>
+					<TEXTFIELD w="150" title="Fax" y="50" h="20" x="10">fax</TEXTFIELD>
+					<TEXTFIELD w="150" title="Address" y="50" h="20" x="290">address</TEXTFIELD>
+					<TEXTFIELD w="150" title="Zip Code" y="70" h="20" x="10">zipcode</TEXTFIELD>
+					<TEXTFIELD w="150" title="Town" y="70" h="20" x="290">town</TEXTFIELD>
+					<COMBOBOX w="150" title="Country" lptable="sys_countrys" noorg="true" lpkey="sys_country_id" y="90" h="20" x="10" lpfield="sys_country_name">sys_country_code_id</COMBOBOX>
+					<CHECKBOX w="50" title="Guardian Contact" y="90" h="20" x="290">guardian_contact</CHECKBOX>
+					<TEXTFIELD w="430" title="Email" y="110" h="20" x="10">email</TEXTFIELD>
+					<TEXTAREA w="430" title="Details" y="130" h="90" x="10">details</TEXTAREA>
+				</FORM>
+			</GRID>
+			<GRID name="Registry Marks" keyfield="registry_mark_id" linkfield="registration_id" table="vw_registry_marks" noorg="true">
+				<TEXTFIELD w="40" title="subject">subject_name</TEXTFIELD>
+				<TEXTFIELD w="40" title="Mark">grade</TEXTFIELD>
+				<FORM name="Registry Marks" keyfield="registrymark_id" linkfield="registration_id" table="registrymarks" noorg="true">
+					<COMBOBOX w="150" title="Subject" lptable="subjects" noorg="true" y="10" h="20" x="10" lpfield="subject_name">subjectid</COMBOBOX>
+					<COMBOBOX w="150" title="Mark" lptable="marks" noorg="true" y="10" h="20" x="290" lpfield="grade">mark_id</COMBOBOX>
+					<TEXTAREA w="430" title="Narrative" y="30" h="90" x="10">narrative</TEXTAREA>
+				</FORM>
+			</GRID>
+			<GRID name="Registry Schools" keyfield="registry_school_id" linkfield="registration_id" table="registry_schools" noorg="true">
+				<TEXTFIELD w="40" title="School Name">school_name</TEXTFIELD>
+				<TEXTFIELD w="40" title="Start Date">start_date</TEXTFIELD>
+				<TEXTFIELD w="40" title="End Date">end_date</TEXTFIELD>
+				<FORM name="Registry Schools" keyfield="registry_school_id" linkfield="registration_id" table="registry_schools" noorg="true">
+					<TEXTAREA w="150" title="Address" y="10" h="60" x="290">address</TEXTAREA>
+					<TEXTFIELD w="150" title="School Name" y="10" h="20" x="10">school_name</TEXTFIELD>
+					<TEXTDATE w="150" title="Start Date" y="30" h="20" x="10">start_date</TEXTDATE>
+					<TEXTDATE w="150" title="End Date" y="50" h="20" x="10">end_date</TEXTDATE>
+					<CHECKBOX w="150" title="Primary School" y="70" h="20" x="10">primary_school</CHECKBOX>
+					<CHECKBOX w="150" title="O-Level School" y="70" h="20" x="290">o_level_school</CHECKBOX>
+					<TEXTAREA w="430" title="Narrative" y="90" h="70" x="10">narrative</TEXTAREA>
+				</FORM>
+			</GRID>
+			<ACTIONS>
+				<ACTION fnct="insnewstudent" title="Approve Students Registration">Approve</ACTION>
+			</ACTIONS>
+		</GRID>
+	</DESK>
+	<DESK w="700" name="Students" type="vert" key="11" h="590">
+		<GRID limit="250" name="Students" keyfield="student_id" orderby="student_id" table="vw_students">
+			<TEXTFIELD w="40" title="Student ID">student_id</TEXTFIELD>
+			<TEXTFIELD w="40" title="School">school_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Denomination">denomination_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Student Name">student_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Sex">sex</TEXTFIELD>
+			<TEXTFIELD w="40" title="Nationality">Nationality</TEXTFIELD>
+			<FORM name="Students" keyfield="student_id" linkfield="student_id" table="students">
+				<TEXTFIELD w="150" title="Student ID" y="10" h="20" x="10">student_id</TEXTFIELD>
+				<COMBOBOX w="150" title="School Name" lptable="schools" noorg="true" y="10" h="20" x="290" lpfield="school_name">schoolid</COMBOBOX>
+				<COMBOBOX w="350" title="Denomination" lptable="denominations" linkfield="religion_id" noorg="true" y="30" h="20" x="10" lpfield="denomination_name">denomination_id</COMBOBOX>
+				<TEXTFIELD w="150" title="Student Name" y="50" h="20" x="10">student_name</TEXTFIELD>
+				<TEXTFIELD w="150" title="Address" y="50" h="20" x="290">address</TEXTFIELD>
+				<TEXTFIELD w="150" title="Zipcode" y="70" h="20" x="10">zipcode</TEXTFIELD>
+				<TEXTFIELD w="150" title="Town" y="70" h="20" x="290">town</TEXTFIELD>
+				<COMBOBOX w="150" title="Country" lptable="sys_countrys" noorg="true" lpkey="sys_country_id" y="90" h="20" x="10" lpfield="sys_country_name">sys_country_code_id</COMBOBOX>
+				<TEXTFIELD w="150" title="Tel No" y="90" h="20" x="290">telno</TEXTFIELD>
+				<TEXTFIELD w="150" title="Email" y="110" h="20" x="10">email</TEXTFIELD>
+				<TEXTDATE w="150" title="Birth Date" y="110" h="20" x="290">birth_date</TEXTDATE>
+				<TEXTFIELD w="150" title="Guardian Name" y="130" h="20" x="10">guardian_name</TEXTFIELD>
+				<TEXTFIELD w="150" title="G. Address" y="130" h="20" x="290">g_address</TEXTFIELD>
+				<TEXTFIELD w="150" title="G. Zip Code" y="150" h="20" x="10">g_zipcode</TEXTFIELD>
+				<TEXTFIELD w="150" title="G. Town" y="150" h="20" x="290">g_town</TEXTFIELD>
+				<COMBOBOX w="150" title="G. Country" lptable="sys_countrys" noorg="true" lpkey="sys_country_id" y="170" h="20" x="10" lpfield="sys_country_name">sys_country_code_id</COMBOBOX>
+				<TEXTFIELD w="150" title="G. Tel No" y="170" h="20" x="290">g_telno</TEXTFIELD>
+				<TEXTFIELD w="150" title="G. Email" y="190" h="20" x="10">g_email</TEXTFIELD>
+				<COMBOBOX w="150" title="Nationality" lptable="sys_countrys" noorg="true" lpkey="sys_country_id" y="190" h="20" x="290" lpfield="sys_country_name">Nationality</COMBOBOX>
+				<COMBOLIST w="50" title="Sex" y="210" h="20" x="10">sex
+					<DATA>M</DATA>
+					<DATA>F</DATA>
+				</COMBOLIST>
+				<COMBOLIST w="50" title="Marital Status" y="210" h="20" x="290">marital_status
+					<DATA>S</DATA>
+					<DATA>M</DATA>
+				</COMBOLIST>
+				<TEXTFIELD w="150" title="Account Number" y="230" h="20" x="10">account_number</TEXTFIELD>
+				<CHECKBOX w="50" title="Alumnae" lw="70" y="230" h="20" x="290">alumnae</CHECKBOX>
+				<CHECKBOX w="50" title="Staff" lw="70" y="230" h="20" x="440">staff</CHECKBOX>
+				<TEXTAREA w="430" title="Details" y="250" h="40" x="10">details</TEXTAREA>
+			</FORM>
+		</GRID>
+	</DESK>
+	<DESK w="695" name="Accepted" type="vert" key="7" h="585">
+		<GRID limit="250" name="Accepted Registrations" keyfield="registration_id" orderby="registration_id desc" table="registrations" noorg="true" where="(accepted=true) AND (reported=false)">
+			<TEXTFIELD w="80" title="Reg. ID">registration_id</TEXTFIELD>
+			<TEXTFIELD w="100" title="Application Date">application_date</TEXTFIELD>
+			<TEXTFIELD w="100" title="First Name">first_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Middle name">middle_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Last Name">last_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Sex">sex</TEXTFIELD>
+			<TEXTFIELD w="40" title="ID">existing_id</TEXTFIELD>
+			<TEXTFIELD w="40" title="Accepted">accepted</TEXTFIELD>
+			<TEXTFIELD w="40" title="Reported">reported</TEXTFIELD>
+		</GRID>
+	</DESK>
+	<DESK w="695" name="Evaluation" orderby="registration_id desc" type="vert" key="5" h="585">
+		<GRID limit="250" name="Registrations" keyfield="registration_id" table="vw_registrations" noorg="true">
+			<TEXTFIELD w="80" title="Reg. ID">registration_id</TEXTFIELD>
+			<TEXTFIELD w="100" title="Application Date">application_date</TEXTFIELD>
+			<TEXTFIELD w="100" title="First Name">first_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Middle name">middle_name</TEXTFIELD>
+			<TEXTFIELD w="100" title="Last Name">last_name</TEXTFIELD>
+			<TEXTFIELD w="40" title="Sex">sex</TEXTFIELD>
+			<GRID name="Evaluation" keyfield="evaluation_id" linkfield="registration_id" table="evaluation" noorg="true">
+				<TEXTFIELD w="40" title="Respondent Name">respondent_name</TEXTFIELD>
+				<TEXTFIELD w="40" title="Evaluation Date">eval_date</TEXTFIELD>
+				<TEXTFIELD w="40" title="coperation">coperation</TEXTFIELD>
+				<TEXTFIELD w="40" title="moralstandards">moral_standards</TEXTFIELD>
+				<TEXTFIELD w="40" title="overal">overal</TEXTFIELD>
+				<FORM name="Evaluation" keyfield="evaluation_id" linkfield="registration_id" table="evaluation" noorg="true">
+					<TEXTFIELD w="200" title="Respondent Name" y="10" h="20" x="10">respondent_name</TEXTFIELD>
+					<TEXTFIELD w="150" title="Respondent Organisation" lw="160" y="10" h="20" x="340">organisation_name</TEXTFIELD>
+					<TEXTFIELD w="150" title="Respondent Position" lw="140" y="30" h="20" x="10">respondent_postion</TEXTFIELD>
+					<TEXTFIELD w="200" title="Address" y="30" h="20" x="310">address</TEXTFIELD>
+					<COMBOLIST w="180" title="Influence" y="50" h="20" x="10">influence
+						<DATA>Positive</DATA>
+						<DATA>Passive</DATA>
+						<DATA>Negative</DATA>
+					</COMBOLIST>
+					<COMBOLIST w="180" title="Honesty" lw="140" y="50" h="20" x="310">honesty
+						<DATA>Always Honest</DATA>
+						<DATA>Mostly Honest</DATA>
+						<DATA>Dishonest</DATA>
+					</COMBOLIST>
+					<COMBOLIST w="180" title="Reliabilty" y="70" h="20" x="10">reliabilty
+						<DATA>Consistently Dependable</DATA>
+						<DATA>Needs some supervision</DATA>
+						<DATA>Unreliable</DATA>
+					</COMBOLIST>
+					<COMBOLIST w="180" title="Co-Operation" lw="140" y="70" h="20" x="310">coperation
+						<DATA>Very Co-operative</DATA>
+						<DATA>Cooperative</DATA>
+						<DATA>Not very Co-operative</DATA>
+					</COMBOLIST>
+					<COMBOLIST w="180" title="Punctuality" y="90" h="20" x="10">punctuality
+						<DATA>Always Punctual</DATA>
+						<DATA>Mostly Punctual</DATA>
+						<DATA>Often Late</DATA>
+					</COMBOLIST>
+					<COMBOLIST w="180" title="Appearance" lw="140" y="90" h="20" x="310">appearance
+						<DATA>Always Neat</DATA>
+						<DATA>Average</DATA>
+						<DATA>Unkempt</DATA>
+					</COMBOLIST>
+					<COMBOLIST w="180" title="MoralStandards" y="110" h="20" x="10">moral_standards
+						<DATA>High</DATA>
+						<DATA>Average</DATA>
+						<DATA>Below Average</DATA>
+					</COMBOLIST>
+					<COMBOLIST w="180" title="Religious Commitment" lw="140" y="110" h="20" x="310">religious_commitment
+						<DATA>High</DATA>
+						<DATA>Average</DATA>
+						<DATA>Indifferent</DATA>
+					</COMBOLIST>
+					<COMBOLIST w="180" title="Church Activities" y="130" h="20" x="10">church_activities
+						<DATA>Very Active</DATA>
+						<DATA>Often Participates</DATA>
+						<DATA>Seldom Participates</DATA>
+					</COMBOLIST>
+					<COMBOLIST w="180" title="Overall" lw="140" y="130" h="20" x="310">overal
+						<DATA>Outstanding Exemplary</DATA>
+						<DATA>Average</DATA>
+						<DATA>Below Average</DATA>
+					</COMBOLIST>
+					<TEXTDATE w="150" title="Evaluation Date" y="150" h="20" x="10">eval_date</TEXTDATE>
+					
+					
+					<CHECKBOX w="50" title="Arrested" y="210" h="20" x="10">arrested</CHECKBOX>
+					<TEXTFIELD w="240" title="School Dismissal" y="210" h="20" x="290">schooldismissal</TEXTFIELD>
+					<TEXTFIELD w="520" title="Recomendation" y="230" h="20" x="10">recomendation</TEXTFIELD>
+					<TEXTAREA w="520" title="Details" y="250" h="40" x="10">details</TEXTAREA>
+				</FORM>
+			</GRID>
+			<GRID name="Health" keyfield="reg_health_id" linkfield="registration_id" table="vw_reg_health" noorg="true">
+				<TEXTFIELD w="140" title="Health Item">health_item_name</TEXTFIELD>
+				<TEXTFIELD w="240" title="Narrative">narrative</TEXTFIELD>
+				<FORM name="Health" keyfield="reg_health_id" linkfield="registration_id" table="reg_health" noorg="true">
+					<COMBOBOX w="430" title="Health Name" lptable="health_items" noorg="true" lpkey="health_item_id" y="10" h="20" x="10" lpfield="health_item_name">health_item_id</COMBOBOX>
+					<TEXTAREA w="430" title="Narrative" y="30" h="90" x="10">narrative</TEXTAREA>
+				</FORM>
+			</GRID>
+		</GRID>
+	</DESK>
+	<DESK w="700" name="Contract Types" type="horl" key="101" h="500">
+		<JASPER filtered="false" name="Contract Types" reportfile="contact_types.jasper"></JASPER>
+	</DESK>
+	<DESK w="700" name="Health Items" type="horl" key="102" h="500">
+		<JASPER filtered="false" name="Health Items" reportfile="healthitems.jasper"></JASPER>
+	</DESK>
+	<DESK w="700" name="Registration List" type="horl" key="104" h="500">
+		<JASPER filtered="false" name="Registration List" reportfile="vw_registrations.jasper"></JASPER>
+	</DESK>
+	<DESK w="700" name="New Students Enrolment" type="horl" key="209" h="500">
+		<FILTER location="250" name="New Students Enrolment" type="horl">
+			<DRILLDOWN name="Year" keyfield="session_year" table="vw_years" listfield="session_year">
+				<DRILLDOWN name="Trimesters" keyfield="session_id" wherefield="session_year" table="vw_sessions" listfield="session" pos="top"></DRILLDOWN>
+			</DRILLDOWN>
+			<JASPER filtered="true" name="Sessions Students" reportfile="qvw_studentsn.jasper"></JASPER>
+			<JASPER filtered="true" name="Students without address" reportfile="qvw_studentsnad.jasper"></JASPER>
+			<JASPER filtered="true" name="Students address" reportfile="qvw_studentsnadd.jasper"></JASPER>
+		</FILTER>
+	</DESK>
+	<DESK w="700" name="New Students By Year" type="horl" key="210" h="500">
+		<FILTER location="250" name="New Students By Year" type="horl">
+			<DRILLDOWN name="Year" keyfield="session_year" table="vw_years" listfield="session_year"></DRILLDOWN>
+			<JASPER filtered="true" name="Sessions Students" reportfile="qvw_studentsna.jasper"></JASPER>
+		</FILTER>
+	</DESK>
+	<DESK w="700" name="Admision Marks Summary" type="horl" key="441" h="500">
+		<JASPER filtered="false" name="Admision Marks Summary" reportfile="studentmarks.jasper"></JASPER>
+	</DESK>
+	<DESK w="700" name="Admision Marks List" type="horl" key="442" h="500">
+		<FILTER location="250" name="Admision Marks List" type="horl">
+			<DRILLDOWN name="Year" keyfield="session_year" table="vw_years" listfield="session_year">
+				<DRILLDOWN name="Trimesters" keyfield="session_id" wherefield="session_year" table="vw_sessions" listfield="session" pos="top"></DRILLDOWN>
+			</DRILLDOWN>
+			<JASPER filtered="true" name="Admision Marks List" reportfile="studentmarkview.jasper"></JASPER>
+		</FILTER>
+	</DESK>
+	<DESK w="700" name="Students Progress" type="horl" key="443" h="500">
+		<FILTER location="250" name="Students Progress" type="horl">
+			<DRILLDOWN name="Year" keyfield="session_year" table="vw_years" listfield="session_year"></DRILLDOWN>
+			<JASPER filtered="true" name="Students Progress" reportfile="studentmarkviewa.jasper"></JASPER>
+		</FILTER>
+	</DESK>
+	<DESK w="700" name="New Students Progress" type="horl" key="211" h="500">
+		<FILTER location="250" name="New Students Progress" type="horl">
+			<DRILLDOWN name="Year" keyfield="session_year" table="vw_years" listfield="session_year"></DRILLDOWN>
+			<JASPER filtered="true" name="Sessions Students" reportfile="qvw_studentsnb.jasper"></JASPER>
+		</FILTER>
+	</DESK>
+	<DESK w="700" name="New Students Level Enrolment" type="horl" key="221" h="500">
+		<FILTER location="250" name="New Students Level Enrolment" type="horl">
+			<DRILLDOWN name="Year" keyfield="session_year" table="vw_years" listfield="session_year">
+				<DRILLDOWN name="Trimesters" keyfield="session_id" wherefield="session_year" table="vw_sessions" listfield="session" pos="top"></DRILLDOWN>
+			</DRILLDOWN>
+			<JASPER filtered="true" name="Sessions Students By Level" reportfile="qvw_studentsnaa.jasper"></JASPER>
+			<JASPER filtered="true" name="Sessions Students By Sub Level" reportfile="qvw_studentsnab.jasper"></JASPER>
+		</FILTER>
+	</DESK>
+	<DESK w="700" name="Yearly Enrollment" type="horl" key="402" h="500">
+		<FILTER location="250" name="Majors Yealy" type="horl">
+			<DRILLDOWN name="Year" keyfield="session_year" table="vw_years" noorg="true" listfield="session_year"></DRILLDOWN>
+			<JASPER name="Enrollement Majors" reportfile="newmajorsummary.jasper"></JASPER>
+			<JASPER name="New Enrollement Majors" reportfile="newmajorsummarya.jasper"></JASPER>
+		</FILTER>
+	</DESK>
+</APP>
